@@ -50,5 +50,8 @@ $(document).ready(() => {
         }).always(() => {
             $('.progress').addClass('hide');
         });
+
+
+
     });
 })
