@@ -5,11 +5,23 @@
  */
 package dhbw.webservices;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  *
  * @author Marius
  */
 
+@RestController
 public class SearchService {
-    // Diese Klasse stellt den RestController der Anwendung dar...
+
+    @RequestMapping("/search")
+    public String search(@RequestParam(value = "query") String query, @RequestParam(value = "type") String type){
+
+        return "";
+    }
+
+
 }
