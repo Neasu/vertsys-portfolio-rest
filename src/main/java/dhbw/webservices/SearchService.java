@@ -12,9 +12,9 @@ import dhbw.pojo.result.search.SearchResultList;
 import dhbw.pojo.search.album.Albums;
 import dhbw.pojo.search.album.SearchAlbum;
 import dhbw.pojo.search.artist.Artists;
+import dhbw.pojo.search.artist.Image;
 import dhbw.pojo.search.artist.Item;
 import dhbw.pojo.search.artist.SearchArtist;
-import dhbw.pojo.search.track.Album;
 import dhbw.pojo.search.track.SearchTrack;
 import dhbw.pojo.search.track.Tracks;
 import dhbw.spotify.RequestCategory;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;

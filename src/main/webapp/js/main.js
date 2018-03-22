@@ -24,6 +24,7 @@ $(document).ready(() => {
 
                 $.getJSON(urlDetailsThis, (responseDetail) => {
                     alert(responseDetail.title + ':\n' + responseDetail.info);
+
                 })
             });
 

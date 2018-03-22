@@ -89,6 +89,7 @@ public class DetailService {
             e.printStackTrace();
         }
 
+
         DetailResult result = new DetailResult(artist.getName(), artist.getType());
         return result;
     }
