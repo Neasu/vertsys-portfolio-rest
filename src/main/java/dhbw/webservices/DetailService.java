@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dhbw.pojo.detail.album.DetailsAlbum;
 import dhbw.pojo.detail.artist.DetailsArtist;
 import dhbw.pojo.detail.track.DetailsTrack;
+import dhbw.pojo.result.detail.DetailResult;
 import dhbw.pojo.result.search.SearchResultList;
 import dhbw.spotify.RequestCategory;
 import dhbw.spotify.RequestType;
@@ -23,7 +24,7 @@ import java.util.Optional;
 public class DetailService {
 
     @RequestMapping("/detail/{id}")
-    public String detail(@PathVariable(value = "id") String id, @RequestParam(value = "type") String type) {
+    public DetailResult detail(@PathVariable(value = "id") String id, @RequestParam(value = "type") String type) {
 
         RequestCategory category = null;
         Optional<String> result = null;
@@ -42,44 +43,43 @@ public class DetailService {
             }
             default: {
                 System.out.println(type);
-                return "";
+                return null;
             }
         }
 
         SpotifyRequest request = new SpotifyRequest(RequestType.DETAIL);
 
         try {
-            result = request.performeRequestDetail(category,id);
+            result = request.performeRequestDetail(category, id);
         } catch (WrongRequestTypeException e) {
             e.printStackTrace();
         }
+
+        DetailResult detailResult = null;
 
         if (result.isPresent()) {
             String json = result.get();
 
             switch (category) {
                 case ALBUM: {
-                    searchResultList = processAlbum(json);
-                    break;
+                    return processAlbum(json);
                 }
                 case TRACK: {
-                    searchResultList = processTrack(json);
-                    break;
+                    return processTrack(json);
                 }
                 case ARTIST: {
-                    searchResultList = processArtist(json);
-                    break;
+                    return processArtist(json);
                 }
             }
 
 
         }
 
-        return "";
+        return null;
 
     }
 
-    private List<SearchResultList> processArtist(String json) {
+    private DetailResult processArtist(String json) {
         ObjectMapper mapper = new ObjectMapper();
         DetailsArtist artist = null;
 
@@ -89,25 +89,25 @@ public class DetailService {
             e.printStackTrace();
         }
 
-
-        return null;
+        DetailResult result = new DetailResult(artist.getName(), artist.getType());
+        return result;
     }
 
-    private List<SearchResultList> processAlbum(String json) {
+    private DetailResult processAlbum(String json) {
         ObjectMapper mapper = new ObjectMapper();
         DetailsAlbum album = null;
 
         try {
-            album = mapper.readValue(json, DeatilsAlbum.class);
+            album = mapper.readValue(json, DetailsAlbum.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-        return null;
+        DetailResult result = new DetailResult(album.getName(), album.getType());
+        return result;
     }
 
-    private List<SearchResultList> processTrack(String json) {
+    private DetailResult processTrack(String json) {
         ObjectMapper mapper = new ObjectMapper();
         DetailsTrack track = null;
 
@@ -116,7 +116,7 @@ public class DetailService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return null;
+        DetailResult result = new DetailResult(track.getName(), track.getType());
+        return result;
     }
 }
