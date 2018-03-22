@@ -1,0 +1,75 @@
+{
+  "type": "Gruppenaufgabe",
+  "topic": "Rest Webservice",
+  "description": "Erstelle eine Spotify-Suchmaschine, mit der du nach Liedern, Sängern oder Alben suchen und diese direkt im Browser abspielen kannst.",
+  "document": "http://bit.ly/WWI16_SpotifySuchmaschine",
+  "exercises": [
+    {
+      "id": 1,
+      "name": "Registriere deine App auf Spotify",
+      "steps": [
+        "Registriere dich auf Spotify.com",
+        "Rufe beta.developer.spotify.com/dashboard/applications auf",
+        "Dort kannst du eine neue App registrieren und erhälst deine ClientID und Client Secret",
+        "Trage ClientID und ClientSecret in src/resources/config.properties ein"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Erstelle den SearchWebservice",
+      "steps": [
+        "Erstelle einen Service, der eine Such-Anfrage an die gegebenen SpotifyRequest-Klasse stellt. Die Klasse übernimmt für dich den Aufruf der Spotify-API und händelt die Authentifizierung.",
+        "Beachte: Die Methoden der SpotifyRequest-Klasse geben dir ein Optional zurück (neu in Java 8). Dieses Optional enthält wiederum einen (Json-)String. Wie du mit dem Optional umgehen kannst, findest du in den Folien unter dem Link oben links 'Zusätzliche Infos'",
+        "Der Service soll mit ../search aufgerufen werden und als Request-Parameter den Suchbegriff (query) und den Suchtyp (type) entgegen nehmen."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Verarbeite die Suchanfrage",
+      "steps": [
+        "Je nach Typ der Anfrage (TRACK, ALBUM, ARTIST) soll die Antwort der Methode der SpotifyRequest-Klasse auf dhbw.pojo.search.track.SearchTrack, dhbw.pojo.search.album.SearchAlbum oder dhbw.pojo.search.artist.SearchArtist gemappt werden. Nutze hierzu den ObjectMapper aus den Folien."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Erstelle deine Search-Respone ans Frontend",
+      "steps": [
+        "Nun musst du aus dem zuvor erstellten Objekt die entsprechenden Infos lesen. Als Hilfestellung kannst du die Informationen auf die gegebene Klasse dhbw.pojo.result.search.SearchResult mappen. Der Webservice soll letztlich alle Informationen, die ein SearchResult Objekt besitzt, zurückgeben.",
+        "Beachte: Dein Webservice kann sowohl einen (json-)String zurück geben, als auch ein Objekt der Klasse SearchResult (dieses wird dann automatisch in einen (json-)String geparst."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Erstelle den DetailsWebservice",
+      "steps": [
+        "Diese Aufgabe ist OPTIONAL! (1 Bonuspunkt)",
+        "Erstelle einen Service, der eine Detail-Anfrage an die gegebenen SpotifyRequest-Klasse stellt.",
+        "Der Service soll mit ../detail/{id} aufgerufen werden, als Path-Variable die ID und Request-Parameter den Typ entgegen nehmen."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Verarbeite die Detail-Antwort",
+      "steps": [
+        "Diese Aufgabe ist OPTIONAL! (1 Bonuspunkt)",
+        "Je nach Typ der Anfrage (TRACK, ALBUM, ARTIST) soll die Antwort auf dhbw.pojo.detail.track.DetailsTrack, dhbw.pojo.detail.album.DetailsAlbum oder dhbw.pojo.detail.artist.DetailsArtist gemappt werden. Nutze hierzu den ObjectMapper aus den Folien."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Erstelle deine Details-Response ans Frontend",
+      "steps": [
+        "Diese Aufgabe ist OPTIONAL! (1 Bonuspunkt)",
+        "Analog zu Aufgabe 4 mit Mapping auf die Klasse dhbw.pojo.result.detail.DetailResult"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Erweitere deinen Service nach belieben",
+      "steps": [
+        "Diese Aufgabe ist OPTIONAL! (1 Bonuspunkt)",
+        "Wenn dir das noch nicht genug war, kannst du die Antwort deines Services um weitere Infos oder Felder erweitern und diese im Frontend entsprechend anzeigen."
+      ]
+    }
+  ]
+}
