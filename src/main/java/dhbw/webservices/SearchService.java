@@ -8,7 +8,10 @@ package dhbw.webservices;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dhbw.pojo.result.search.SearchResult;
+import dhbw.pojo.result.search.SearchResultList;
 import dhbw.pojo.search.album.SearchAlbum;
+import dhbw.pojo.search.artist.Artists;
+import dhbw.pojo.search.artist.Item;
 import dhbw.pojo.search.artist.SearchArtist;
 import dhbw.pojo.search.track.SearchTrack;
 import dhbw.spotify.RequestCategory;
@@ -21,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -68,52 +74,74 @@ public class SearchService {
         if (result.isPresent()) {
             String json = result.get();
 
+            List<SearchResultList> searchResultList = null;
             SearchResult searchResult = null;
 
             switch (category) {
                 case ALBUM: {
-                    searchResult = processAlbum(json);
+                    searchResultList = processAlbum(json);
                     break;
                 }
                 case TRACK: {
-                    searchResult = processTrack(json);
+                    searchResultList = processTrack(json);
                     break;
                 }
                 case ARTIST: {
-                    searchResult = processArtist(json);
+                    searchResultList = processArtist(json);
                     break;
                 }
             }
 
+            searchResult = new SearchResult(query, type, searchResultList);
+
             ObjectMapper mapper = new ObjectMapper();
-            String response;
+            String response = "";
 
             try {
                 response = mapper.writeValueAsString(searchResult);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
+
+            return response;
         }
 
         return "";
     }
 
-    private SearchResult processArtist(String json) {
+    private List<SearchResultList> processArtist(String json) {
         ObjectMapper mapper = new ObjectMapper();
+        SearchArtist artist = null;
 
         try {
-            SearchArtist artist = mapper.readValue(json, SearchArtist.class);
+             artist = mapper.readValue(json, SearchArtist.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        SearchResult result = null;
+        Artists artists = artist.getArtists();
+
+        List<Item> items = artists.getItems();
+        Iterator<Item> it = items.iterator();
+
+        List<SearchResultList> results = new ArrayList<SearchResultList>();
+
+        while(it.hasNext()) {
+            Item item = it.next();
+            SearchResultList searchResultList = new SearchResultList(
+                    item.getId(),
+                    item.getName(),
+                    "",
+                    item.getExternalUrls().getSpotify()
+            );
+            results.add(searchResultList);
+        }
 
 
-        return result;
+        return results;
     }
 
-    private SearchResult processAlbum(String json) {
+    private List<SearchResultList> processAlbum(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
@@ -125,10 +153,10 @@ public class SearchService {
         SearchResult result = null;
 
 
-        return result;
+        return null;
     }
 
-    private SearchResult processTrack(String json) {
+    private List<SearchResultList> processTrack(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
@@ -140,7 +168,7 @@ public class SearchService {
         SearchResult result = null;
 
 
-        return result;
+        return null;
     }
 
 
