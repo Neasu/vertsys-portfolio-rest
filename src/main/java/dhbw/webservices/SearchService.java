@@ -9,11 +9,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dhbw.pojo.result.search.SearchResult;
 import dhbw.pojo.result.search.SearchResultList;
+import dhbw.pojo.search.album.Albums;
 import dhbw.pojo.search.album.SearchAlbum;
 import dhbw.pojo.search.artist.Artists;
 import dhbw.pojo.search.artist.Item;
 import dhbw.pojo.search.artist.SearchArtist;
+import dhbw.pojo.search.track.Album;
 import dhbw.pojo.search.track.SearchTrack;
+import dhbw.pojo.search.track.Tracks;
 import dhbw.spotify.RequestCategory;
 import dhbw.spotify.RequestType;
 import dhbw.spotify.SpotifyRequest;
@@ -120,7 +123,6 @@ public class SearchService {
         }
 
         Artists artists = artist.getArtists();
-
         List<Item> items = artists.getItems();
         Iterator<Item> it = items.iterator();
 
@@ -131,7 +133,7 @@ public class SearchService {
             SearchResultList searchResultList = new SearchResultList(
                     item.getId(),
                     item.getName(),
-                    "",
+                    item.getName(),
                     item.getExternalUrls().getSpotify()
             );
             results.add(searchResultList);
@@ -143,32 +145,64 @@ public class SearchService {
 
     private List<SearchResultList> processAlbum(String json) {
         ObjectMapper mapper = new ObjectMapper();
+        SearchAlbum album = null;
 
         try {
-            SearchAlbum album = mapper.readValue(json, SearchAlbum.class);
+            album = mapper.readValue(json, SearchAlbum.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        SearchResult result = null;
+        Albums albums = album.getAlbums();
+        List<dhbw.pojo.search.album.Item> items = albums.getItems();
+        Iterator<dhbw.pojo.search.album.Item> it = items.iterator();
+
+        List<SearchResultList> results = new ArrayList<SearchResultList>();
+
+        while(it.hasNext()) {
+            dhbw.pojo.search.album.Item item = it.next();
+            SearchResultList searchResultList = new SearchResultList(
+                    item.getId(),
+                    item.getName(),
+                    item.getName(),
+                    item.getExternalUrls().getSpotify()
+            );
+            results.add(searchResultList);
+        }
 
 
-        return null;
+        return results;
     }
 
     private List<SearchResultList> processTrack(String json) {
         ObjectMapper mapper = new ObjectMapper();
+        SearchTrack track = null;
 
         try {
-            SearchTrack track = mapper.readValue(json, SearchTrack.class);
+            track = mapper.readValue(json, SearchTrack.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        SearchResult result = null;
+        Tracks tracks = track.getTracks();
+        List<dhbw.pojo.search.track.Item> items = tracks.getItems();
+        Iterator<dhbw.pojo.search.track.Item> it = items.iterator();
+
+        List<SearchResultList> results = new ArrayList<SearchResultList>();
+
+        while(it.hasNext()) {
+            dhbw.pojo.search.track.Item item = it.next();
+            SearchResultList searchResultList = new SearchResultList(
+                    item.getId(),
+                    item.getName(),
+                    item.getName(),
+                    item.getExternalUrls().getSpotify()
+            );
+            results.add(searchResultList);
+        }
 
 
-        return null;
+        return results;
     }
 
 
