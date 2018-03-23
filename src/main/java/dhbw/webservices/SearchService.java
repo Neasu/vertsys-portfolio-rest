@@ -104,7 +104,7 @@ public class SearchService {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-          
+
             return response;
         }
 
@@ -129,14 +129,17 @@ public class SearchService {
         while(it.hasNext()) {
             Item item = it.next();
 
-            dhbw.pojo.search.artist.Image img = item.getImages().get(0);
+            String img = "";
+            if(!item.getImages().isEmpty()) {
+                img = item.getImages().get(0).getUrl();
+            }
 
             SearchResultList searchResultList = new SearchResultList(
                     item.getId(),
                     item.getName(),
                     item.getName(),
                     item.getExternalUrls().getSpotify(),
-                    img.getUrl()
+                    img
             );
             results.add(searchResultList);
         }
@@ -163,14 +166,17 @@ public class SearchService {
         while(it.hasNext()) {
             dhbw.pojo.search.album.Item item = it.next();
 
-            dhbw.pojo.search.album.Image img = item.getImages().get(0);
+            String img = "";
+            if(!item.getImages().isEmpty()) {
+                img = item.getImages().get(0).getUrl();
+            }
 
             SearchResultList searchResultList = new SearchResultList(
                     item.getId(),
                     item.getName(),
                     item.getName(),
                     item.getExternalUrls().getSpotify(),
-                    img.getUrl()
+                    img
             );
             results.add(searchResultList);
         }
@@ -198,14 +204,17 @@ public class SearchService {
         while(it.hasNext()) {
             dhbw.pojo.search.track.Item item = it.next();
 
-            dhbw.pojo.search.track.Image img = item.getAlbum().getImages().get(0);
+            String img = "";
+            if(!item.getAlbum().getImages().isEmpty() ) {
+                img = item.getAlbum().getImages().get(0).getUrl();
+            }
 
             SearchResultList searchResultList = new SearchResultList(
                     item.getId(),
                     item.getName(),
                     item.getName(),
                     item.getExternalUrls().getSpotify(),
-                    img.getUrl()
+                    img
             );
             results.add(searchResultList);
         }
