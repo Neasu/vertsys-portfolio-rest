@@ -104,7 +104,7 @@ public class SearchService {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            System.out.println(response);
+          
             return response;
         }
 
