@@ -36,7 +36,9 @@ $(document).ready(() => {
             $('#resultList').append(
                 $.map(response.results, (item) => {
             	    return '<tr>'
-            	        + '<td>'
+                        + '<td>'
+                        + '<img style="border-radius: 100%; max-width: 80px; max-height: 80px;" src="' + item.imgUrl + '"></img>'
+                        + '</td><td>'
                 	    + item.title
                 	    + '</td><td>'
                 	    + item.description

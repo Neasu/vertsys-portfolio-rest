@@ -5,12 +5,14 @@ public class SearchResultList {
     private String title;
     private String description;
     private String playLink;
+    private String imgUrl;
 
-    public SearchResultList(String id, String titel, String description, String playLink) {
+    public SearchResultList(String id, String titel, String description, String playLink, String imgUrl) {
         this.id = id;
         this.title = titel;
         this.description = description;
         this.playLink = playLink;
+        this.imgUrl = imgUrl;
     }
 
     public SearchResultList(){
@@ -47,5 +49,13 @@ public class SearchResultList {
 
     public void setPlayLink(String playLink) {
         this.playLink = playLink;
+    }
+
+    public String getImgUrl(){
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl){
+        this.imgUrl = imgUrl;
     }
 }

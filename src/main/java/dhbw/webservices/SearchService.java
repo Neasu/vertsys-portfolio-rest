@@ -104,7 +104,7 @@ public class SearchService {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-
+            System.out.println(response);
             return response;
         }
 
@@ -120,7 +120,6 @@ public class SearchService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         Artists artists = artist.getArtists();
         List<Item> items = artists.getItems();
         Iterator<Item> it = items.iterator();
@@ -129,11 +128,15 @@ public class SearchService {
 
         while(it.hasNext()) {
             Item item = it.next();
+
+            dhbw.pojo.search.artist.Image img = item.getImages().get(0);
+
             SearchResultList searchResultList = new SearchResultList(
                     item.getId(),
                     item.getName(),
                     item.getName(),
-                    item.getExternalUrls().getSpotify()
+                    item.getExternalUrls().getSpotify(),
+                    img.getUrl()
             );
             results.add(searchResultList);
         }
@@ -151,7 +154,6 @@ public class SearchService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         Albums albums = album.getAlbums();
         List<dhbw.pojo.search.album.Item> items = albums.getItems();
         Iterator<dhbw.pojo.search.album.Item> it = items.iterator();
@@ -160,11 +162,15 @@ public class SearchService {
 
         while(it.hasNext()) {
             dhbw.pojo.search.album.Item item = it.next();
+
+            dhbw.pojo.search.album.Image img = item.getImages().get(0);
+
             SearchResultList searchResultList = new SearchResultList(
                     item.getId(),
                     item.getName(),
                     item.getName(),
-                    item.getExternalUrls().getSpotify()
+                    item.getExternalUrls().getSpotify(),
+                    img.getUrl()
             );
             results.add(searchResultList);
         }
@@ -191,11 +197,15 @@ public class SearchService {
 
         while(it.hasNext()) {
             dhbw.pojo.search.track.Item item = it.next();
+
+            dhbw.pojo.search.track.Image img = item.getAlbum().getImages().get(0);
+
             SearchResultList searchResultList = new SearchResultList(
                     item.getId(),
                     item.getName(),
                     item.getName(),
-                    item.getExternalUrls().getSpotify()
+                    item.getExternalUrls().getSpotify(),
+                    img.getUrl()
             );
             results.add(searchResultList);
         }
