@@ -37,7 +37,7 @@ $(document).ready(() => {
                 $.map(response.results, (item) => {
             	    return '<tr>'
                         + '<td>'
-                        + '<img style="border-radius: 100%; max-width: 80px; max-height: 80px;" src="' + item.imgUrl + '"></img>'
+                        + '<img class="album-icon" src="' + item.imgUrl + '"></img>'
                         + '</td><td>'
                 	    + item.title
                 	    + '</td><td>'
