@@ -1,4 +1,11 @@
 $(document).ready(() => {
+    //Use enter for submitting
+    $(document).bind('keypress', function(e) {
+        if(e.keyCode==13){
+            $('#searchSubmit').trigger('click');
+        }
+    });
+
     $('#searchSubmit').on('click', () => {
         const urlSearch = 'http://localhost:8080/search';
         const urlDetails = 'http://localhost:8080/detail/';
@@ -63,4 +70,7 @@ $(document).ready(() => {
 
 
     });
+
+
+
 })
