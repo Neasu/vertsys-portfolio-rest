@@ -3,6 +3,7 @@ package dhbw.webservices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dhbw.pojo.detail.album.DetailsAlbum;
+import dhbw.pojo.detail.album.Image;
 import dhbw.pojo.detail.artist.DetailsArtist;
 import dhbw.pojo.detail.track.DetailsTrack;
 import dhbw.pojo.result.detail.DetailResult;

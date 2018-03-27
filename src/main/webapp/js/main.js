@@ -23,9 +23,14 @@ $(document).ready(() => {
                 console.log('url:' + urlDetailsThis);
 
                 $.getJSON(urlDetailsThis, (responseDetail) => {
-                    alert(responseDetail.title + ':\n' + responseDetail.info);
+                    //alert(responseDetail.title + ':\n' + responseDetail.info);
 
-                })
+
+                    $('#insertInfo').html('Titel: ' + responseDetail.title + '<br>' + 'Infos: ' + responseDetail.info);
+                    $('.modal').modal();
+                    $('#modal1').modal('open');
+
+                });
             });
 
             $('#resultList').on('click', '#playButton', event=> {
@@ -48,7 +53,8 @@ $(document).ready(() => {
             	        + '</td></tr>';
             }).join());
         }).fail((e) => {
-            alert('An error occured')
+            //alert('An error occured')
+            Materialize.toast("Bitte alle Felder ausfüllen",2000);
             console.log(e);
         }).always(() => {
             $('.progress').addClass('hide');
