@@ -47,7 +47,6 @@ public class SearchService {
             category = RequestCategory.valueOf(type);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
             category = RequestCategory.ARTIST;
         }
 

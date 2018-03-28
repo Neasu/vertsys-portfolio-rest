@@ -26,16 +26,17 @@ public class DetailService {
     @RequestMapping("/detail/{id}")
     public DetailResult detail(@PathVariable(value = "id") String id, @RequestParam(value = "type") String type) {
 
-        RequestCategory category = null;
-        Optional<String> result = null;
+        RequestCategory category;
 
         try{
             category = RequestCategory.valueOf(type);
         } catch (Exception e) {
             e.printStackTrace();
+            category = RequestCategory.ARTIST;
         }
 
-        SpotifyRequest request = new SpotifyRequest(RequestType.DETAIL);
+        SpotifyRequest      request = new SpotifyRequest(RequestType.DETAIL);
+        Optional<String>    result  = Optional.empty();
 
         try {
             result = request.performeRequestDetail(category, id);
@@ -57,13 +58,13 @@ public class DetailService {
                 case ARTIST: {
                     return processArtist(json);
                 }
+                default: {
+                    return null;
+                }
             }
-
-
+        } else {
+            return null;
         }
-
-        return null;
-
     }
 
     private DetailResult processArtist(String json) {
@@ -76,9 +77,12 @@ public class DetailService {
             e.printStackTrace();
         }
 
-
-        DetailResult result = new DetailResult(artist.getName(), artist.getType());
-        return result;
+        if (artist != null) {
+            DetailResult result = new DetailResult(artist.getName(), artist.getType());
+            return result;
+        } else {
+            return null;
+        }
     }
 
     private DetailResult processAlbum(String json) {
@@ -91,8 +95,12 @@ public class DetailService {
             e.printStackTrace();
         }
 
-        DetailResult result = new DetailResult(album.getName(), album.getType());
-        return result;
+        if (album != null) {
+            DetailResult result = new DetailResult(album.getName(), album.getType());
+            return result;
+        } else {
+            return null;
+        }
     }
 
     private DetailResult processTrack(String json) {
@@ -104,7 +112,12 @@ public class DetailService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        DetailResult result = new DetailResult(track.getName(), track.getType());
-        return result;
+
+        if (track != null) {
+            DetailResult result = new DetailResult(track.getName(), track.getType());
+            return result;
+        } else {
+            return null;
+        }
     }
 }
