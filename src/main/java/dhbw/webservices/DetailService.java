@@ -43,7 +43,6 @@ public class DetailService {
             e.printStackTrace();
         }
 
-        DetailResult detailResult = null;
 
         if (result.isPresent()) {
             String json = result.get();
