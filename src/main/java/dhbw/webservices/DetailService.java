@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class DetailService {
@@ -26,16 +27,17 @@ public class DetailService {
     @RequestMapping("/detail/{id}")
     public DetailResult detail(@PathVariable(value = "id") String id, @RequestParam(value = "type") String type) {
 
-        RequestCategory category = null;
-        Optional<String> result = null;
+        RequestCategory category;
 
         try{
             category = RequestCategory.valueOf(type);
         } catch (Exception e) {
             e.printStackTrace();
+            category = RequestCategory.ARTIST;
         }
 
-        SpotifyRequest request = new SpotifyRequest(RequestType.DETAIL);
+        SpotifyRequest      request = new SpotifyRequest(RequestType.DETAIL);
+        Optional<String>    result  = Optional.empty();
 
         try {
             result = request.performeRequestDetail(category, id);
@@ -57,13 +59,13 @@ public class DetailService {
                 case ARTIST: {
                     return processArtist(json);
                 }
+                default: {
+                    return null;
+                }
             }
-
-
+        } else {
+            return null;
         }
-
-        return null;
-
     }
 
     private DetailResult processArtist(String json) {
@@ -76,9 +78,17 @@ public class DetailService {
             e.printStackTrace();
         }
 
+        String details = String.format("Popularity: %d, Followers: %d, Genres: %s",
+                artist.getPopularity(),
+                artist.getFollowers().getTotal(),
+                String.join(", ", artist.getGenres()));
 
-        DetailResult result = new DetailResult(artist.getName(), artist.getType());
-        return result;
+        if (artist != null) {
+            DetailResult result = new DetailResult(artist.getName(), details);
+            return result;
+        } else {
+            return null;
+        }
     }
 
     private DetailResult processAlbum(String json) {
@@ -91,8 +101,19 @@ public class DetailService {
             e.printStackTrace();
         }
 
-        DetailResult result = new DetailResult(album.getName(), album.getType());
-        return result;
+
+
+        String details = String.format("Released: %s, Label: %s, Popularity: %d",
+                album.getReleaseDate(),
+                album.getLabel(),
+                album.getPopularity());
+
+        if (album != null) {
+            DetailResult result = new DetailResult(album.getName(), details);
+            return result;
+        } else {
+            return null;
+        }
     }
 
     private DetailResult processTrack(String json) {
@@ -104,7 +125,26 @@ public class DetailService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        DetailResult result = new DetailResult(track.getName(), track.getType());
-        return result;
+
+        int milliseconds = track.getDurationMs();
+
+        int seconds = (milliseconds / 1000) % 60 ;
+        int minutes = ((milliseconds / (1000*60)) % 60);
+        int hours   = ((milliseconds / (1000*60*60)) % 24);
+
+        String details = String.format("Album: %s, Duration %02d:%02d:%02d, Popularity: %d",
+                track.getAlbum().getName(),
+                hours,
+                minutes,
+                seconds,
+                track.getPopularity()
+        );
+
+        if (track != null) {
+            DetailResult result = new DetailResult(track.getName(), details);
+            return result;
+        } else {
+            return null;
+        }
     }
 }
