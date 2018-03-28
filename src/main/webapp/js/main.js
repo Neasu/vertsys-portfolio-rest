@@ -32,25 +32,14 @@ $(document).ready(() => {
 
 
                 $.getJSON(urlDetailsThis, (responseDetail) => {
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    alert(responseDetail.title + ':\n' + responseDetail.info);
-                })
-=======
-=======
->>>>>>> 860045ad930440abc30c2655a88e7153c7d63a7a
-                    //alert(responseDetail.title + ':\n' + responseDetail.info);
 
+                    //alert(responseDetail.title + ':\n' + responseDetail.info);
 
                     $('#insertInfo').html('Titel: ' + responseDetail.title + '<br>' + 'Infos: ' + responseDetail.info);
                     $('.modal').modal();
                     $('#modal1').modal('open');
 
                 });
-<<<<<<< HEAD
->>>>>>> 860045ad930440abc30c2655a88e7153c7d63a7a
-=======
->>>>>>> 860045ad930440abc30c2655a88e7153c7d63a7a
             });
 
             $('#resultList').on('click', '#playButton', event=> {
@@ -83,7 +72,5 @@ $(document).ready(() => {
 
 
     });
-
-
 
 })
