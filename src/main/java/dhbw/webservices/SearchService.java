@@ -41,56 +41,57 @@ public class SearchService {
     @RequestMapping("/search")
     public String search(@RequestParam(value = "query") String query, @RequestParam(value = "type") String type){
 
-        RequestCategory category = null;
-        Optional<String> result = null;
+        RequestCategory category;
 
         try{
             category = RequestCategory.valueOf(type);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            category = RequestCategory.ARTIST;
         }
 
-        SpotifyRequest request = new SpotifyRequest(RequestType.SEARCH);
+        SpotifyRequest   request = new SpotifyRequest(RequestType.SEARCH);
+        Optional<String> response  = Optional.empty();
 
         try {
-            result = request.performeRequestSearch(category,query);
+            response = request.performeRequestSearch(category,query);
         } catch (WrongRequestTypeException e) {
             e.printStackTrace();
         }
 
-        if (result.isPresent()) {
-            String json = result.get();
+        if (response.isPresent()) {
+            String responseJSON = response.get();
 
             List<SearchResultList> searchResultList = null;
-            SearchResult searchResult = null;
 
             switch (category) {
                 case ALBUM: {
-                    searchResultList = processAlbum(json);
+                    searchResultList = processAlbum(responseJSON);
                     break;
                 }
                 case TRACK: {
-                    searchResultList = processTrack(json);
+                    searchResultList = processTrack(responseJSON);
                     break;
                 }
                 case ARTIST: {
-                    searchResultList = processArtist(json);
+                    searchResultList = processArtist(responseJSON);
                     break;
                 }
             }
 
-            searchResult = new SearchResult(query, type, searchResultList);
+            SearchResult searchResult = new SearchResult(query, type, searchResultList);
 
             ObjectMapper mapper = new ObjectMapper();
-            String response = "";
+            String result = "";
 
             try {
-                response = mapper.writeValueAsString(searchResult);
+                result = mapper.writeValueAsString(searchResult);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
 
-            return response;
+            return result;
         }
 
         return "";
@@ -105,32 +106,37 @@ public class SearchService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Artists artists = artist.getArtists();
-        List<Item> items = artists.getItems();
-        Iterator<Item> it = items.iterator();
 
-        List<SearchResultList> results = new ArrayList<SearchResultList>();
+        if (artist != null) {
+            Artists                 artists = artist.getArtists();
+            List<Item>              items   = artists.getItems();
+            Iterator<Item>          it      = items.iterator();
+            List<SearchResultList>  results = new ArrayList<>();
 
-        while(it.hasNext()) {
-            Item item = it.next();
+            while(it.hasNext()) {
+                Item item = it.next();
 
-            String img = "";
-            if(!item.getImages().isEmpty()) {
-                img = item.getImages().get(0).getUrl();
+                String imageURL = "";
+
+                if(!item.getImages().isEmpty()) {
+                    imageURL = item.getImages().get(0).getUrl();
+                }
+
+                SearchResultList searchResultList = new SearchResultList(
+                        item.getId(),
+                        item.getName(),
+                        item.getName(),
+                        item.getExternalUrls().getSpotify(),
+                        imageURL
+                );
+
+                results.add(searchResultList);
             }
 
-            SearchResultList searchResultList = new SearchResultList(
-                    item.getId(),
-                    item.getName(),
-                    item.getName(),
-                    item.getExternalUrls().getSpotify(),
-                    img
-            );
-            results.add(searchResultList);
+            return results;
+        } else {
+            return new ArrayList<>();
         }
-
-
-        return results;
     }
 
     private List<SearchResultList> processAlbum(String json) {
@@ -142,32 +148,38 @@ public class SearchService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Albums albums = album.getAlbums();
-        List<dhbw.pojo.search.album.Item> items = albums.getItems();
-        Iterator<dhbw.pojo.search.album.Item> it = items.iterator();
 
-        List<SearchResultList> results = new ArrayList<SearchResultList>();
+        if (album != null) {
+            Albums                                  albums  = album.getAlbums();
+            List<dhbw.pojo.search.album.Item>       items   = albums.getItems();
+            Iterator<dhbw.pojo.search.album.Item>   it      = items.iterator();
 
-        while(it.hasNext()) {
-            dhbw.pojo.search.album.Item item = it.next();
+            List<SearchResultList> results = new ArrayList<>();
 
-            String img = "";
-            if(!item.getImages().isEmpty()) {
-                img = item.getImages().get(0).getUrl();
+            while(it.hasNext()) {
+                dhbw.pojo.search.album.Item item = it.next();
+
+                String imgURL = "";
+
+                if(!item.getImages().isEmpty()) {
+                    imgURL = item.getImages().get(0).getUrl();
+                }
+
+                SearchResultList searchResultList = new SearchResultList(
+                        item.getId(),
+                        item.getName(),
+                        item.getName(),
+                        item.getExternalUrls().getSpotify(),
+                        imgURL
+                );
+
+                results.add(searchResultList);
             }
 
-            SearchResultList searchResultList = new SearchResultList(
-                    item.getId(),
-                    item.getName(),
-                    item.getName(),
-                    item.getExternalUrls().getSpotify(),
-                    img
-            );
-            results.add(searchResultList);
+            return results;
+        } else {
+            return new ArrayList<>();
         }
-
-
-        return results;
     }
 
     private List<SearchResultList> processTrack(String json) {
@@ -180,33 +192,36 @@ public class SearchService {
             e.printStackTrace();
         }
 
-        Tracks tracks = track.getTracks();
-        List<dhbw.pojo.search.track.Item> items = tracks.getItems();
-        Iterator<dhbw.pojo.search.track.Item> it = items.iterator();
+        if (track != null) {
+            Tracks                                  tracks  = track.getTracks();
+            List<dhbw.pojo.search.track.Item>       items   = tracks.getItems();
+            Iterator<dhbw.pojo.search.track.Item>   it      = items.iterator();
 
-        List<SearchResultList> results = new ArrayList<SearchResultList>();
+            List<SearchResultList> results = new ArrayList<SearchResultList>();
 
-        while(it.hasNext()) {
-            dhbw.pojo.search.track.Item item = it.next();
+            while(it.hasNext()) {
+                dhbw.pojo.search.track.Item item = it.next();
 
-            String img = "";
-            if(!item.getAlbum().getImages().isEmpty() ) {
-                img = item.getAlbum().getImages().get(0).getUrl();
+                String imgURL = "";
+
+                if(!item.getAlbum().getImages().isEmpty() ) {
+                    imgURL = item.getAlbum().getImages().get(0).getUrl();
+                }
+
+                SearchResultList searchResultList = new SearchResultList(
+                        item.getId(),
+                        item.getName(),
+                        item.getName(),
+                        item.getExternalUrls().getSpotify(),
+                        imgURL
+                );
+
+                results.add(searchResultList);
             }
 
-            SearchResultList searchResultList = new SearchResultList(
-                    item.getId(),
-                    item.getName(),
-                    item.getName(),
-                    item.getExternalUrls().getSpotify(),
-                    img
-            );
-            results.add(searchResultList);
+            return results;
+        } else {
+            return new ArrayList<>();
         }
-
-
-        return results;
     }
-
-
 }
