@@ -28,23 +28,11 @@ public class DetailService {
 
         RequestCategory category = null;
         Optional<String> result = null;
-        switch (type) {
-            case "ARTIST": {
-                category = RequestCategory.ARTIST;
-                break;
-            }
-            case "ALBUM": {
-                category = RequestCategory.ALBUM;
-                break;
-            }
-            case "TRACK": {
-                category = RequestCategory.TRACK;
-                break;
-            }
-            default: {
-                System.out.println(type);
-                return null;
-            }
+
+        try{
+            category = RequestCategory.valueOf(type);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         SpotifyRequest request = new SpotifyRequest(RequestType.DETAIL);
