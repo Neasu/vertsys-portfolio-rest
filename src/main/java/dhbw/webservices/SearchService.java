@@ -12,7 +12,6 @@ import dhbw.pojo.result.search.SearchResultList;
 import dhbw.pojo.search.album.Albums;
 import dhbw.pojo.search.album.SearchAlbum;
 import dhbw.pojo.search.artist.Artists;
-import dhbw.pojo.search.artist.Image;
 import dhbw.pojo.search.artist.Item;
 import dhbw.pojo.search.artist.SearchArtist;
 import dhbw.pojo.search.track.SearchTrack;
@@ -39,30 +38,16 @@ import java.util.Optional;
 @RestController
 public class SearchService {
 
-
-
     @RequestMapping("/search")
     public String search(@RequestParam(value = "query") String query, @RequestParam(value = "type") String type){
 
         RequestCategory category = null;
         Optional<String> result = null;
-        switch(type){
-            case "ARTIST": {
-                category = RequestCategory.ARTIST;
-                break;
-            }
-            case "ALBUM": {
-                category = RequestCategory.ALBUM;
-                break;
-            }
-            case "TRACK": {
-                category = RequestCategory.TRACK;
-                break;
-            }
-            default:{
-                System.out.println(type);
-                return "";
-            }
+
+        try{
+            category = RequestCategory.valueOf(type);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         SpotifyRequest request = new SpotifyRequest(RequestType.SEARCH);

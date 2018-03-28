@@ -1,4 +1,11 @@
 $(document).ready(() => {
+    //Use enter for submitting
+    $(document).bind('keypress', function(e) {
+        if(e.keyCode==13){
+            $('#searchSubmit').trigger('click');
+        }
+    });
+
     $('#searchSubmit').on('click', () => {
         const urlSearch = 'http://localhost:8080/search';
         const urlDetails = 'http://localhost:8080/detail/';
@@ -22,10 +29,22 @@ $(document).ready(() => {
                 var urlDetailsThis = urlDetails + spotifyId + '?type=' + typeId;
                 console.log('url:' + urlDetailsThis);
 
-                $.getJSON(urlDetailsThis, (responseDetail) => {
-                    alert(responseDetail.title + ':\n' + responseDetail.info);
 
+
+                $.getJSON(urlDetailsThis, (responseDetail) => {
+<<<<<<< HEAD
+                    alert(responseDetail.title + ':\n' + responseDetail.info);
                 })
+=======
+                    //alert(responseDetail.title + ':\n' + responseDetail.info);
+
+
+                    $('#insertInfo').html('Titel: ' + responseDetail.title + '<br>' + 'Infos: ' + responseDetail.info);
+                    $('.modal').modal();
+                    $('#modal1').modal('open');
+
+                });
+>>>>>>> 860045ad930440abc30c2655a88e7153c7d63a7a
             });
 
             $('#resultList').on('click', '#playButton', event=> {
@@ -48,7 +67,8 @@ $(document).ready(() => {
             	        + '</td></tr>';
             }).join());
         }).fail((e) => {
-            alert('An error occured')
+            //alert('An error occured')
+            Materialize.toast("Bitte alle Felder ausfüllen",2000);
             console.log(e);
         }).always(() => {
             $('.progress').addClass('hide');
@@ -57,4 +77,7 @@ $(document).ready(() => {
 
 
     });
+
+
+
 })
