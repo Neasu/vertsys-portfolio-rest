@@ -14,6 +14,7 @@ import dhbw.pojo.search.album.SearchAlbum;
 import dhbw.pojo.search.artist.Artists;
 import dhbw.pojo.search.artist.Item;
 import dhbw.pojo.search.artist.SearchArtist;
+import dhbw.pojo.search.track.Artist;
 import dhbw.pojo.search.track.SearchTrack;
 import dhbw.pojo.search.track.Tracks;
 import dhbw.spotify.RequestCategory;
@@ -121,10 +122,12 @@ public class SearchService {
                     imageURL = item.getImages().get(0).getUrl();
                 }
 
+                String description = String.format("Popularity: %d", item.getPopularity());
+
                 SearchResultList searchResultList = new SearchResultList(
                         item.getId(),
                         item.getName(),
-                        item.getName(),
+                        description,
                         item.getExternalUrls().getSpotify(),
                         imageURL
                 );
@@ -164,10 +167,12 @@ public class SearchService {
                     imgURL = item.getImages().get(0).getUrl();
                 }
 
+                String description = String.format("Released: %s", item.getReleaseDate());
+
                 SearchResultList searchResultList = new SearchResultList(
                         item.getId(),
                         item.getName(),
-                        item.getName(),
+                        description,
                         item.getExternalUrls().getSpotify(),
                         imgURL
                 );
@@ -207,10 +212,12 @@ public class SearchService {
                     imgURL = item.getAlbum().getImages().get(0).getUrl();
                 }
 
+                String description = String.format("Popularity: %d", item.getPopularity());
+
                 SearchResultList searchResultList = new SearchResultList(
                         item.getId(),
                         item.getName(),
-                        item.getName(),
+                        description,
                         item.getExternalUrls().getSpotify(),
                         imgURL
                 );
